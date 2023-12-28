@@ -11544,10 +11544,23 @@
      * _.isEmpty({ 'a': 1 });
      * // => false
      */
+
+    function validateObjectId(id){
+      const {ObjectId} = require('mongodb');
+      if (!id) return false;
+      try {
+        id = id.toString();
+        if (ObjectId.isValid(id)) return new ObjectId(id).toString() === id;
+      } catch (err) {
+        console.error('validateObjectId fails with error :', err);
+      }
+      return false;
+    };
     function isEmpty(value) {
       if (value == null) {
         return true;
       }
+      if(validateObjectId(value)) return false;
       if (isArrayLike(value) &&
           (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' ||
             isBuffer(value) || isTypedArray(value) || isArguments(value))) {
